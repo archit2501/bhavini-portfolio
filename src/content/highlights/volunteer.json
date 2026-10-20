@@ -1,0 +1,26 @@
+{
+  "label": "Volunteer",
+  "order": 4,
+  "cover": {
+    "type": "text",
+    "text": "YfP"
+  },
+  "figures": ["cleanups", "volunteers", "community"],
+  "frames": [
+    {
+      "type": "text",
+      "heading": "Youth for Parivarthan",
+      "body": "Student Volunteer, Bengaluru, June to November 2024"
+    },
+    {
+      "type": "text",
+      "heading": "5+ clean-up drives",
+      "body": "with 20–30 volunteers at each one"
+    },
+    {
+      "type": "text",
+      "heading": "50+ people",
+      "body": "engaged on responsible waste disposal"
+    }
+  ]
+}

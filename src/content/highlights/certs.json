@@ -1,0 +1,20 @@
+{
+  "label": "Certs",
+  "order": 6,
+  "cover": {
+    "type": "text",
+    "text": "✓"
+  },
+  "frames": [
+    {
+      "type": "text",
+      "heading": "HubSpot Academy",
+      "body": "Digital Marketing and Social Media Marketing, December 2025"
+    },
+    {
+      "type": "text",
+      "heading": "NPTEL",
+      "body": "Training of Trainers, October 2024"
+    }
+  ]
+}
