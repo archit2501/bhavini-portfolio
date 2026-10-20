@@ -6,9 +6,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/**/*.ts'],
-      // content.ts and content.config.ts only wire astro:content to the tested schemas and guards;
+      // content.ts, content.config.ts and media.ts only wire Astro's content and asset loaders to the tested schemas and guards;
       // the build and e2e tests exercise them.
-      exclude: ['src/**/*.test.ts', 'src/lib/content.ts', 'src/content.config.ts'],
+      exclude: [
+        'src/**/*.test.ts',
+        'src/lib/content.ts',
+        'src/content.config.ts',
+        'src/lib/media.ts',
+      ],
       thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
     },
   },
