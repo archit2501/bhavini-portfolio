@@ -37,6 +37,11 @@ describe('color math', () => {
 });
 
 describe('design tokens', () => {
+  it('story text passes 4.5:1 across the whole story canvas', () => {
+    expect(contrastRatio(light['on-story'], light['story-start'])).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(light['on-story'], light['story-end'])).toBeGreaterThanOrEqual(4.5);
+  });
+
   it('defines the same dark values for the system setting and the toggle', () => {
     expect(darkToggle).toEqual(darkMedia);
   });
