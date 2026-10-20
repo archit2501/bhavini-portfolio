@@ -18,7 +18,12 @@ test.describe('desktop', () => {
     await page.goto('/');
     const first = page.locator('.highlight').first();
     await expect(first.locator('.cover')).toHaveCSS('width', '77px');
-    await expect(first.locator('.ring')).toHaveCSS('border-top-width', '1px');
+    // About 1px: an emulated iPad forced to 1280px scales the page and reports 0.8px.
+    const ring = await first
+      .locator('.ring')
+      .evaluate((el) => parseFloat(getComputedStyle(el).borderTopWidth));
+    expect(ring).toBeGreaterThanOrEqual(0.75);
+    expect(ring).toBeLessThanOrEqual(1.25);
     await expect(first.locator('.ring')).not.toHaveCSS('background-image', /gradient/);
   });
 });

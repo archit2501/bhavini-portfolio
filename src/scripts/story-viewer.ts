@@ -47,6 +47,8 @@ export function initStoryViewer(): void {
   let busy = false;
   let returnUrl = '/';
   let returnTitle = document.title;
+  // Safari doesn't focus a link on click; focus the opener explicitly when the viewer closes.
+  let opener: HTMLElement | null = null;
 
   const renderGroup = (group: number) => {
     const template = templates[group];
@@ -210,6 +212,7 @@ export function initStoryViewer(): void {
     const group = ids.indexOf(link.dataset.story ?? '');
     if (group < 0) return;
     event.preventDefault();
+    opener = link;
     open(group, true);
   });
 
@@ -333,6 +336,7 @@ export function initStoryViewer(): void {
       if (history.state?.story) history.back();
       else history.replaceState({}, '', returnUrl);
     }
+    opener?.focus();
   });
 
   window.addEventListener('popstate', () => {

@@ -98,10 +98,14 @@ test('without JavaScript, Messages jumps to the contact links', async ({ browser
   await context.close();
 });
 
-test('skip link takes keyboard users straight to the main content', async ({ page }) => {
+test('skip link takes keyboard users straight to the main content', async ({
+  page,
+  browserName,
+}) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await page.keyboard.press('Tab');
+  // WebKit's Tab skips links unless full keyboard access is on; Option+Tab is the Safari way.
+  await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('main')).toBeFocused();

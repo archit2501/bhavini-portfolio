@@ -108,15 +108,19 @@ test.describe('desktop pop-up', () => {
     await expect(view.locator('.burst')).not.toHaveClass(/play/);
   });
 
-  test('copy link puts the post URL on the clipboard', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  test('copy link puts the post URL on the clipboard', async ({ page, context, browserName }) => {
+    // WebKit can't grant clipboard-read to tests, so there only the confirmation is checked.
+    const canRead = browserName === 'chromium';
+    if (canRead) await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.goto('/');
     await page.locator('#panel-posts a[data-post="lead-pipeline"]').click();
     await page.getByRole('button', { name: 'Copy link to this post' }).click();
     await expect(page.locator('#post-modal .actions .status')).toHaveText('Link copied');
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
-      'http://localhost:4417/p/lead-pipeline/',
-    );
+    if (canRead) {
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+        'http://localhost:4417/p/lead-pipeline/',
+      );
+    }
   });
 
   test('the open pop-up has no serious accessibility issues', async ({ page }) => {

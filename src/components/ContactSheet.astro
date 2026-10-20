@@ -69,12 +69,17 @@ const linkedinLabel = links.linkedin.replace(/^https?:\/\/(www\.)?/, '');
 <script>
   const sheet = document.getElementById('contact-sheet') as HTMLDialogElement | null;
   if (sheet) {
-    document.querySelectorAll<HTMLElement>('[data-open-contact]').forEach((opener) => {
-      opener.addEventListener('click', (event) => {
+    // Safari doesn't focus a link on click, so the dialog's own focus return can land on <body>.
+    // Remember the opener and focus it explicitly when the sheet closes.
+    let opener: HTMLElement | null = null;
+    document.querySelectorAll<HTMLElement>('[data-open-contact]').forEach((link) => {
+      link.addEventListener('click', (event) => {
         event.preventDefault();
+        opener = link;
         sheet.showModal();
       });
     });
+    sheet.addEventListener('close', () => opener?.focus());
     // A click on the dialog element itself is a click on the backdrop: the panel fills the rest.
     sheet.addEventListener('click', (event) => {
       if (event.target === sheet) sheet.close();
