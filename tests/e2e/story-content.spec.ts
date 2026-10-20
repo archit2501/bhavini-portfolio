@@ -23,17 +23,21 @@ test('the avatar ring opens the intro story, which is not in the highlights row'
   await expect(viewer(page).locator('.frame.active')).toContainText("Hi, I'm Bhavini");
 });
 
-test('after the intro is seen, the ring turns grey and stays grey', async ({ page }) => {
+test('after the intro is seen, the ring turns grey and stays grey', async ({ page, context }) => {
   await page.goto('/');
   const ring = page.locator('.avatar-link .avatar').first();
   await expect(ring).not.toHaveClass(/seen/);
   await page.locator('a.avatar-link').click();
+  await expect(page.locator('#story-viewer')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(ring).toHaveClass(/seen/);
-  // Closing goes back to "/" asynchronously; reload only once it has.
-  await expect(page).toHaveURL(/\/$/);
-  await page.reload();
-  await expect(ring).toHaveClass(/seen/);
+
+  // A fresh page in the same browser remembers it. (A second tab avoids racing the first
+  // tab's history traversal back to "/".)
+  const later = await context.newPage();
+  await later.goto('/');
+  await expect(later.locator('.avatar-link .avatar').first()).toHaveClass(/seen/);
+  await later.close();
 });
 
 test.describe('on a 390px phone', () => {
