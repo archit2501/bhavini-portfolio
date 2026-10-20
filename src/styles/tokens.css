@@ -29,6 +29,11 @@
   --ring: linear-gradient(45deg, var(--ring-start), var(--ring-end));
   --focus: var(--accent-text);
 
+  /* Story canvas: always dark, like Instagram's, so it doesn't change with the theme. */
+  --story-start: #0b5e7a;
+  --story-end: #0c1014;
+  --on-story: #ffffff;
+
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --fs-12: 12px;
   --lh-12: 16px;
