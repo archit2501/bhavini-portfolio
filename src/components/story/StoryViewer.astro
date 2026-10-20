@@ -80,7 +80,7 @@ const initials = profile.displayName
   >
     {data.frames.map((frame, i) => (
       <div
-        class="frame"
+        class={`frame tone-${(i % 3) + 1}`}
         role="group"
         aria-roledescription="story"
         aria-label={`${i + 1} of ${data.frames.length}`}
@@ -173,6 +173,19 @@ const initials = profile.displayName
 
   .frames :global(.frame.active) {
     display: flex;
+  }
+
+  /* Text stories rotate through the same three colour fields as the grid. */
+  .frames :global(.frame.tone-1) {
+    background: linear-gradient(160deg, var(--story-start), var(--story-end));
+  }
+
+  .frames :global(.frame.tone-2) {
+    background: linear-gradient(160deg, var(--tile-slate), var(--story-end));
+  }
+
+  .frames :global(.frame.tone-3) {
+    background: var(--accent);
   }
 
   .frames :global(.frame img) {

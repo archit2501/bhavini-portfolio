@@ -1,6 +1,6 @@
 ---
 import Link from '@lucide/astro/icons/link';
-import type { Figure, Profile } from '../../lib/content-schema';
+import type { Figure, Highlight, Profile } from '../../lib/content-schema';
 import Avatar from '../Avatar.astro';
 import ActionButtons from './ActionButtons.astro';
 import StatsRow from './StatsRow.astro';
@@ -8,9 +8,13 @@ import StatsRow from './StatsRow.astro';
 interface Props {
   profile: Profile;
   figures: Record<string, Figure>;
+  /** The story behind the avatar ring; without one the ring is decoration only. */
+  intro?: { id: string; data: Highlight };
 }
 
-const { profile, figures } = Astro.props;
+const { profile, figures, intro } = Astro.props;
+const AvatarWrap = intro ? 'a' : 'span';
+const introCount = intro?.data.frames.length ?? 0;
 const stats = profile.stats.map((id) => figures[id]);
 const initials = profile.displayName
   .split(/\s+/)
@@ -22,22 +26,32 @@ const linkLabel = profile.links.linkedin.replace(/^https?:\/\/(www\.)?/, '');
 
 <header class="profile">
   <div class="avatar-cell">
-    <Avatar
-      class="avatar-wide"
-      size={150}
-      ring="story"
-      src={profile.avatar.src}
-      alt={profile.avatar.alt}
-      initials={initials}
-    />
-    <Avatar
-      class="avatar-narrow"
-      size={86}
-      ring="story"
-      src={profile.avatar.src}
-      alt={profile.avatar.alt}
-      initials={initials}
-    />
+    <AvatarWrap
+      class="avatar-link"
+      href={intro && `/stories/${intro.id}/`}
+      data-story={intro?.id}
+      aria-label={
+        intro &&
+        `View ${profile.displayName}'s intro story, ${introCount} ${introCount === 1 ? 'story' : 'stories'}`
+      }
+    >
+      <Avatar
+        class="avatar-wide"
+        size={150}
+        ring="story"
+        src={profile.avatar.src}
+        alt={profile.avatar.alt}
+        initials={initials}
+      />
+      <Avatar
+        class="avatar-narrow"
+        size={86}
+        ring="story"
+        src={profile.avatar.src}
+        alt={profile.avatar.alt}
+        initials={initials}
+      />
+    </AvatarWrap>
   </div>
   <h1 class="full-name">{profile.displayName}</h1>
   <p class="username">{profile.username}</p>
@@ -53,7 +67,32 @@ const linkLabel = profile.links.linkedin.replace(/^https?:\/\/(www\.)?/, '');
   <ActionButtons links={profile.links} />
 </header>
 
+<script>
+  // Like Instagram, the ring turns grey once the intro has been seen (remembered per browser).
+  const KEY = 'bhavini:seen:intro';
+  const markSeen = () =>
+    document.querySelectorAll('.avatar-link .avatar').forEach((a) => a.classList.add('seen'));
+  try {
+    if (localStorage.getItem(KEY)) markSeen();
+  } catch {
+    // Storage can be blocked; the ring just stays in its unseen colour.
+  }
+  document.querySelector('a.avatar-link')?.addEventListener('click', () => {
+    try {
+      localStorage.setItem(KEY, '1');
+    } catch {
+      // See above.
+    }
+    markSeen();
+  });
+</script>
+
 <style>
+  .avatar-link {
+    display: inline-flex;
+    border-radius: 50%;
+  }
+
   .profile {
     display: grid;
     grid-template-columns: 96px minmax(0, 1fr);

@@ -1,0 +1,37 @@
+{
+  "label": "Intro",
+  "order": 0,
+  "inRow": false,
+  "cover": {
+    "type": "text",
+    "text": "BM"
+  },
+  "figures": ["revenue", "deals", "cgpa"],
+  "frames": [
+    {
+      "type": "text",
+      "heading": "Hi, I'm Bhavini",
+      "body": "Sales & Operations at F1Jobs.io, based in Bengaluru."
+    },
+    {
+      "type": "text",
+      "heading": "Psychology + English",
+      "body": "BA from Christ University, 2023 to 2026, with an 8.81 CGPA."
+    },
+    {
+      "type": "text",
+      "heading": "$100K+",
+      "body": "in revenue from 7+ sales since May 2026."
+    },
+    {
+      "type": "text",
+      "heading": "Tap the highlights",
+      "body": "Each circle on my profile is one part of my story."
+    },
+    {
+      "type": "text",
+      "heading": "Let's talk",
+      "body": "Use the Contact button on my profile, or find me on LinkedIn."
+    }
+  ]
+}
