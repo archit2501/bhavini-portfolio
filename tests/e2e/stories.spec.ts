@@ -188,7 +188,7 @@ test.describe('phone viewer', () => {
   });
 
   test("touches at the left edge are left to iOS's back-swipe", async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name !== 'phone', 'needs a touch screen');
+    test.skip(!testInfo.project.use.hasTouch, 'needs a touch screen');
     await openHighlight(page, 'F1Jobs');
     await page.touchscreen.tap(300, 420);
     await expect(activeFrame(page)).toContainText('$100K+');

@@ -51,6 +51,7 @@ const person = jsonLdScript(personJsonLd(profile, new URL('/', Astro.site).href)
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={pageUrl} />
     <link rel="sitemap" href="/sitemap.xml" />
     <script type="application/ld+json" set:html={person} />
