@@ -17,6 +17,7 @@ export default [
       'plan/',
       '.claude-protocol/',
       '.claude/',
+      'media/',
     ],
   },
   js.configs.recommended,

@@ -2,16 +2,25 @@
   "revenue": {
     "title": "$100K+ in revenue",
     "order": 1,
-    "figure": "revenue"
+    "figure": "revenue",
+    "description": "F1Jobs.io, Sales & Operations: $100K+ in revenue from 7+ sales, since May 2026.",
+    "video": "/reels/revenue.mp4",
+    "poster": "/reels/revenue.webp"
   },
   "workflow": {
     "title": "65% workflow gain",
     "order": 2,
-    "figure": "workflow"
+    "figure": "workflow",
+    "description": "F1Jobs.io, Customer operations: 65% workflow efficiency gain after resolving 20+ customer tickets, since May 2026.",
+    "video": "/reels/workflow.mp4",
+    "poster": "/reels/workflow.webp"
   },
   "deals": {
-    "title": "7+ deals closed",
+    "title": "7+ sales closed",
     "order": 3,
-    "figure": "deals"
+    "figure": "deals",
+    "description": "F1Jobs.io, Sales: 7+ sales closed, $100K+ in revenue, since May 2026.",
+    "video": "/reels/deals.mp4",
+    "poster": "/reels/deals.webp"
   }
 }

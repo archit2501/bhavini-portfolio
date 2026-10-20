@@ -101,6 +101,8 @@ export const reelSchema = z.object({
   title: text,
   order: z.number().int().positive(),
   figure: text,
+  /** Everything the reel shows on screen, for screen readers (the reels are silent). */
+  description: text.optional(),
   video: text.optional(),
   poster: text.optional(),
   captions: text.optional(),
