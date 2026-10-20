@@ -1,0 +1,16 @@
+{
+  "bhavini": {
+    "username": "bhavini.malhotra",
+    "displayName": "Bhavini Malhotra",
+    "category": "Sales & Operations",
+    "bio": "Sales & Operations at F1Jobs.io\nPsychology + English, Christ University\nBengaluru",
+    "location": "Bengaluru",
+    "avatar": {
+      "alt": "Bhavini Malhotra"
+    },
+    "stats": ["revenue", "deals", "workflow"],
+    "links": {
+      "linkedin": "https://www.linkedin.com/in/bhavini-malhotra-26b0a224"
+    }
+  }
+}

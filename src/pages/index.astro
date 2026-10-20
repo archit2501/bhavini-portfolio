@@ -1,5 +1,8 @@
 ---
-import { pageTitle, site } from '../lib/site';
+import { loadSiteContent } from '../lib/content';
+import { pageTitle } from '../lib/site';
+
+const { profile } = await loadSiteContent();
 ---
 
 <html lang="en">
@@ -15,8 +18,9 @@ import { pageTitle, site } from '../lib/site';
   <body>
     <a href="#main">Skip to content</a>
     <main id="main">
-      <h1>{site.name}</h1>
-      <p>{site.role}. Portfolio coming soon.</p>
+      <h1>{profile.displayName}</h1>
+      <p>{profile.category}</p>
+      <p style="white-space: pre-line">{profile.bio}</p>
     </main>
   </body>
 </html>

@@ -1,0 +1,36 @@
+{
+  "label": "F1Jobs",
+  "order": 1,
+  "cover": {
+    "type": "text",
+    "text": "F1"
+  },
+  "figures": ["revenue", "deals", "workflow", "tickets"],
+  "frames": [
+    {
+      "type": "text",
+      "heading": "Sales & Operations Executive",
+      "body": "F1Jobs.io (Neurascribe Inc.), May 2026 to now"
+    },
+    {
+      "type": "text",
+      "heading": "$100K+",
+      "body": "in revenue from 7+ sales"
+    },
+    {
+      "type": "text",
+      "heading": "The pipeline",
+      "body": "Lead hunting, prospect identification, outreach, qualification and follow-up"
+    },
+    {
+      "type": "text",
+      "heading": "Face of the brand",
+      "body": "I lead social media marketing and appear on the F1Jobs.io website"
+    },
+    {
+      "type": "text",
+      "heading": "65%",
+      "body": "workflow efficiency gain after resolving 20+ customer tickets"
+    }
+  ]
+}

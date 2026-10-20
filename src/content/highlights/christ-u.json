@@ -1,0 +1,31 @@
+{
+  "label": "Christ U",
+  "order": 5,
+  "cover": {
+    "type": "text",
+    "text": "CU"
+  },
+  "figures": ["cgpa"],
+  "frames": [
+    {
+      "type": "text",
+      "heading": "Christ University",
+      "body": "BA Psychology and English, 2023 to 2026"
+    },
+    {
+      "type": "text",
+      "heading": "8.81",
+      "body": "CGPA"
+    },
+    {
+      "type": "text",
+      "heading": "Student Council",
+      "body": "Student Representative, 2023 to 2024"
+    },
+    {
+      "type": "text",
+      "heading": "Committees",
+      "body": "Hospitality and Discipline Committees for departmental events and fests"
+    }
+  ]
+}

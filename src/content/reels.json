@@ -1,0 +1,17 @@
+{
+  "revenue": {
+    "title": "$100K+ in revenue",
+    "order": 1,
+    "figure": "revenue"
+  },
+  "workflow": {
+    "title": "65% workflow gain",
+    "order": 2,
+    "figure": "workflow"
+  },
+  "deals": {
+    "title": "7+ deals closed",
+    "order": 3,
+    "figure": "deals"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "label": "Vastra Kala",
+  "order": 2,
+  "cover": {
+    "type": "text",
+    "text": "VK"
+  },
+  "figures": ["regions", "units"],
+  "frames": [
+    {
+      "type": "text",
+      "heading": "Marketing & Brand Operations Intern",
+      "body": "Vastra Kala, Phagwara (hybrid), August to December 2025"
+    },
+    {
+      "type": "text",
+      "heading": "Content to dispatch",
+      "body": "End-to-end product movement for an export-focused brand"
+    },
+    {
+      "type": "text",
+      "heading": "5+ regions",
+      "body": "International orders across 5+ global regions"
+    },
+    {
+      "type": "text",
+      "heading": "100+",
+      "body": "units a month, with accurate documentation and on-time dispatch"
+    }
+  ]
+}

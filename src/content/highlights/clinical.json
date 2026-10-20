@@ -1,0 +1,32 @@
+{
+  "label": "Clinical",
+  "order": 3,
+  "cover": {
+    "type": "text",
+    "text": "Ψ"
+  },
+  "textOnly": true,
+  "figures": ["sessions", "caseHistories", "intakes"],
+  "frames": [
+    {
+      "type": "text",
+      "heading": "Clinical Intern",
+      "body": "ANR Hospital and AAS Rehab Centre, Jalandhar, April to June 2024"
+    },
+    {
+      "type": "text",
+      "heading": "20+ sessions",
+      "body": "Observed and assisted in therapy and psychological assessment sessions"
+    },
+    {
+      "type": "text",
+      "heading": "4+ case histories",
+      "body": "Documented psychological, occupational and social factors"
+    },
+    {
+      "type": "text",
+      "heading": "8–12 intake interviews",
+      "body": "Structured intakes that supported treatment planning"
+    }
+  ]
+}
