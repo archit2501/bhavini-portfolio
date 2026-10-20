@@ -30,6 +30,8 @@ test('after the intro is seen, the ring turns grey and stays grey', async ({ pag
   await page.locator('a.avatar-link').click();
   await page.keyboard.press('Escape');
   await expect(ring).toHaveClass(/seen/);
+  // Closing goes back to "/" asynchronously; reload only once it has.
+  await expect(page).toHaveURL(/\/$/);
   await page.reload();
   await expect(ring).toHaveClass(/seen/);
 });
