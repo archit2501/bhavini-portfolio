@@ -1,6 +1,8 @@
 ---
+import Wordmark from '../assets/wordmark.svg';
 import { loadSiteContent } from '../lib/content';
 import { pageTitle } from '../lib/site';
+import '../styles/global.css';
 
 const { profile } = await loadSiteContent();
 ---
@@ -17,6 +19,9 @@ const { profile } = await loadSiteContent();
   </head>
   <body>
     <a href="#main">Skip to content</a>
+    <header style="padding: 16px">
+      <Wordmark height={28} />
+    </header>
     <main id="main">
       <h1>{profile.displayName}</h1>
       <p>{profile.category}</p>
