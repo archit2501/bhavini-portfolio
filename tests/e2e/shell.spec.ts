@@ -49,7 +49,7 @@ test('every nav item does something real', async ({ page }) => {
 
   await nav.getByRole('link', { name: 'Reels', exact: true }).click();
   await expect(page).toHaveURL(/\/reels\/$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Reels');
+  await expect(page.getByRole('tab', { name: 'Reels' })).toHaveAttribute('aria-selected', 'true');
   await expect(nav.getByRole('link', { name: 'Reels', exact: true })).toHaveAttribute(
     'aria-current',
     'page',

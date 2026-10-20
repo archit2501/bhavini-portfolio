@@ -1,0 +1,41 @@
+---
+import type { Reel } from '../../lib/content-schema';
+import TypeTile from '../post/TypeTile.astro';
+
+interface Props {
+  reels: { id: string; data: Reel }[];
+}
+
+const { reels } = Astro.props;
+---
+
+<!-- Tiles stay static until the reels are rendered (task 2.2.1). -->
+<ul class="reels-grid" role="list">
+  {reels.map(({ data }, i) => (
+    <li class="reel">
+      <TypeTile headline={data.title} tone={((i % 3) + 1) as 1 | 2 | 3} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .reels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .reel {
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .reels-grid {
+      gap: 4px;
+    }
+  }
+</style>

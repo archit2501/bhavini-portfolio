@@ -1,13 +1,5 @@
 ---
-import Highlights from '../components/profile/Highlights.astro';
-import ProfileHeader from '../components/profile/ProfileHeader.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { loadSiteContent } from '../lib/content';
-
-const { profile, figures, highlights } = await loadSiteContent();
+import ProfilePage from '../components/profile/ProfilePage.astro';
 ---
 
-<BaseLayout current="home">
-  <ProfileHeader profile={profile} figures={figures} />
-  <Highlights highlights={highlights} />
-</BaseLayout>
+<ProfilePage tab="posts" />

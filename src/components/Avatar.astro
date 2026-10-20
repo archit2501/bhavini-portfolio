@@ -24,7 +24,10 @@ const outer = ring === 'story' ? size + 2 * (ringWidth + gap) : size;
   {src ? (
     <img src={src} alt={alt} width={size} height={size} />
   ) : (
-    <span class="initials" role="img" aria-label={alt}>
+    <span
+      class="initials"
+      {...(alt ? { role: 'img', 'aria-label': alt } : { 'aria-hidden': 'true' })}
+    >
       {initials}
     </span>
   )}

@@ -50,8 +50,10 @@ test.describe('desktop header (1280px)', () => {
   test('has no Follow, login or open-in-app prompts anywhere', async ({ page }) => {
     await page.goto('/');
     const text = (await page.locator('body').innerText()).toLowerCase();
-    for (const word of ['follow', 'log in', 'login', 'sign up', 'open app', 'open in app']) {
-      expect(text).not.toContain(word);
+    // "follow-up" in a caption is fine; a Follow button, or followers/following counts, are not.
+    expect(text).not.toMatch(/\b(follow|followers|following)\b(?!-)/);
+    for (const phrase of ['log in', 'login', 'sign up', 'open app', 'open in app']) {
+      expect(text).not.toContain(phrase);
     }
   });
 
