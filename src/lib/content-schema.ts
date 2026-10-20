@@ -80,7 +80,9 @@ const highlightCover = z.discriminatedUnion('type', [
 export const highlightSchema = z
   .object({
     label: text,
-    order: z.number().int().positive(),
+    order: z.number().int().nonnegative(),
+    /** False for the intro story, which opens from the avatar ring instead of the row. */
+    inRow: z.boolean().default(true),
     cover: highlightCover,
     /** Privacy: a text-only highlight may never show a photo. */
     textOnly: z.boolean().default(false),
