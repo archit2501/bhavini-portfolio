@@ -31,21 +31,23 @@ The site is built so every missing photo falls back to a text tile, and every fi
 
 ## Figures to confirm
 
+All 13 confirmed by Bhavini on 2026-10-20.
+
 | Figure as shown                     | Where                 | Confirmed |
 | ----------------------------------- | --------------------- | --------- |
-| $100K+ revenue                      | F1Jobs.io             | ☐         |
-| 7+ deals                            | F1Jobs.io             | ☐         |
-| 65% workflow gain                   | F1Jobs.io             | ☐         |
-| 20+ customer tickets resolved       | F1Jobs.io             | ☐         |
-| 5+ global regions                   | Vastra Kala           | ☐         |
-| 100+ units a month                  | Vastra Kala           | ☐         |
-| 5+ clean-up drives                  | Youth for Parivarthan | ☐         |
-| 20–30 volunteers per drive          | Youth for Parivarthan | ☐         |
-| 50+ community members engaged       | Youth for Parivarthan | ☐         |
-| 20+ therapy and assessment sessions | ANR Hospital          | ☐         |
-| 4+ case histories                   | ANR Hospital          | ☐         |
-| 8–12 intake interviews              | ANR Hospital          | ☐         |
-| 8.81 CGPA                           | Christ University     | ☐         |
+| $100K+ revenue                      | F1Jobs.io             | ☑         |
+| 7+ deals                            | F1Jobs.io             | ☑         |
+| 65% workflow gain                   | F1Jobs.io             | ☑         |
+| 20+ customer tickets resolved       | F1Jobs.io             | ☑         |
+| 5+ global regions                   | Vastra Kala           | ☑         |
+| 100+ units a month                  | Vastra Kala           | ☑         |
+| 5+ clean-up drives                  | Youth for Parivarthan | ☑         |
+| 20–30 volunteers per drive          | Youth for Parivarthan | ☑         |
+| 50+ community members engaged       | Youth for Parivarthan | ☑         |
+| 20+ therapy and assessment sessions | ANR Hospital          | ☑         |
+| 4+ case histories                   | ANR Hospital          | ☑         |
+| 8–12 intake interviews              | ANR Hospital          | ☑         |
+| 8.81 CGPA                           | Christ University     | ☑         |
 
 When she confirms a figure, set `"verified": true` for it in `src/content/figures.json`. The deploy build refuses to publish while any figure is still unverified.
 
