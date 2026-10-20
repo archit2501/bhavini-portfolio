@@ -1,0 +1,267 @@
+{
+  "plan_status": "final",
+  "plan_parts_done": ["part1-plan", "part2-design"],
+  "category": "stat",
+  "duration_s": 15,
+  "fps": 30,
+  "canvas": { "w": 1080, "h": 1920, "aspect": "9:16" },
+  "style": "Calm, confident, editorial-minimal stat card in the brand's teal. Reads as a native tile in an Instagram-styled portfolio but is entirely her own brand: no Instagram colours, no Instagram logo shapes (no rounded-square camera glyph). One dominant motif: the brand ring. It is pinned dead-centre for all 15 s, closes as the number lands, and later frames the bhavini wordmark like a profile ring. Flat gradient background, solid shapes, white type, generous stillness. Motion is the message; there is no audio.",
+  "palette": ["#0b5e7a", "#0c1014", "#0b7a75", "#0e9f94", "#ffffff"],
+  "palette_roles": {
+    "bg_gradient": "linear-gradient(to bottom right, #0b5e7a, #0c1014) on a full-bleed child layer",
+    "accent_solid": "#0b7a75 (time chip fill, static background glow)",
+    "ring_gradient": "#0e9f94 -> #0b5e7a, an SVG linearGradient running top-left to bottom-right across the ring",
+    "text": "#ffffff, with hierarchy set by opacity only (1 / 0.88 / 0.78)",
+    "banned": ["#FFD600", "#FF7A00", "#FF0169", "#D300C5", "#7638FA", "#4A5DF9", "#0095F6"]
+  },
+  "font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif",
+  "font_note": "The brand's fixed system stack overrides the schema's 'HF embed-list font'. Load no webfont. Render locally on macOS so -apple-system resolves to SF Pro and the proof snapshots match the final render. Hero stat weight 800, label 600, detail 500.",
+  "beats": [1.0, 1.35, 3.45, 4.9, 6.4, 10.3, 10.75, 12.2],
+  "beat_names": {
+    "1.0": "poster hold ends; reset starts",
+    "1.35": "count-up and ring redraw start",
+    "3.45": "count lands and ring closes (signature)",
+    "4.9": "detail line enters",
+    "6.4": "time chip enters (pattern interrupt)",
+    "10.3": "stat lockup exits; ring stays pinned",
+    "10.75": "wordmark path draw starts",
+    "12.2": "sign-off fully composed; static hold to 15.0"
+  },
+  "export": "mp4",
+  "export_spec": {
+    "container": "mp4 (H.264, yuv420p), 1080x1920, 30 fps, 15.0 s = 450 frames",
+    "audio": "none. Plays muted inline. The composition has no <audio>; if the encoder writes a silent track, strip it (ffmpeg -an -c:v copy).",
+    "size_budget_bytes": 2000000,
+    "render_first_try": "npx hyperframes render . --crf 23 -o ./renders/reel-1.mp4",
+    "render_if_over_budget": "re-render with --crf 26, then --crf 28; if it is still over budget, use --video-bitrate 900k (about 1.7 MB for 15 s)",
+    "post": "ffmpeg -i renders/reel-1.mp4 -c copy -movflags +faststart -an renders/reel-1.web.mp4 for inline web playback; keep the result at or under 2,000,000 bytes",
+    "poster": {
+      "time_s": 0.0,
+      "note": "Frames 0.00 to 0.95 s are identical and fully composed (ring, context, hero stat, label), so any early frame works as the site's poster. Optional still: npx hyperframes snapshot --at 0.5"
+    }
+  },
+  "asset_needs": [],
+  "asset_needs_note": "Asset-free form category. The only graphic is the user-supplied inline wordmark SVG (in content.signoff.wordmark_svg), so the source phase is skipped.",
+  "brief": "Frame 0 is already the poster: a large teal-gradient ring centred in a deep teal-to-ink field, with the hero stat '$100K+' in heavy white type inside it, 'in revenue' beneath, and 'F1Jobs.io · Sales & Operations' above. After one second the stat sinks away and the ring unwinds back to 12 o'clock. Then the number counts up from $0K+ to $100K+, growing as it counts, while the ring redraws clockwise in exactly the same ease, so the ring closes on the frame the number lands. The label rises in. 'from 7+ sales' slides in from the left, then a solid teal pill reading 'since May 2026' pops open. The full lockup breathes for about 3.4 s. Then the stat lockup clears, the ring stays exactly where it is, and her monoline 'bhavini' wordmark draws itself letter by letter inside the ring with the i-dots popping last. 'Bhavini Malhotra · Sales & Operations' fades up below, and the sign-off holds completely still for 2.8 s. The single dominant motion idea: the brand ring is a pinned anchor that closes on the number and then becomes her profile ring. The loop seam (sign-off back to poster) is a clean content swap inside the same ring.",
+  "block": "count-up",
+  "blocks": [
+    {
+      "id": "count-up",
+      "type": "component",
+      "role": "hero count-up (value, prefix, suffix, tabular numerals, affix optical lift, deterministic integer per frame, en-US grouping)",
+      "how": "npx hyperframes add count-up, then port its count, format, fit and affix logic inline into the root timeline. The motion-graphics contract allows exactly one paused timeline, so do not mount it as a sub-composition. Feed it the root variables statPrefix / statValue / statSuffix (start fixed at 0)."
+    },
+    {
+      "id": "svg-stroke-trace",
+      "type": "component",
+      "role": "sign-off wordmark draw (measured getTotalLength dash draw)",
+      "how": "npx hyperframes add svg-stroke-trace, then port its measured-length draw inline and extend it from one path to the wordmark's 9 stroke elements in letter order plus 2 filled dots. Turn off its hold drift and its closed-path fill (the wordmark stays stroke-only, and the hold is still)."
+    }
+  ],
+  "rules": ["counting-dynamic-scale", "stat-bars-and-fills (ring form)", "svg-path-draw"],
+  "blueprint": "dataviz-countup (single-instrument, static-camera form; no camera moves) combined with the fixed-anchor idea from fixed-anchor-cycle: the ring never moves, only its contents change",
+  "hand_authored_gaps": [
+    "Brand ring draw/retract: a full 360-degree ring that is not bound to a percentage. The catalog's conic-progress-ring and mk-usage-arc tie the fill to a percentage, which would imply a maximum the facts do not have. Build it per stat-bars-and-fills ring form plus svg-path-draw.",
+    "Text-line entrances and exits plus the cover-to-count reset, using the primitives in references/motion-vocabulary.md"
+  ],
+  "customize": {
+    "count-up": {
+      "start": 0,
+      "end": "var statValue",
+      "prefix": "var statPrefix",
+      "suffix": "var statSuffix",
+      "accent": "override to #ffffff (all text is white), with affix colour #ffffff",
+      "glow": false,
+      "exit": "none (the root timeline handles the exit on a wrapper)",
+      "affixes": "Keep them FIXED and visible during the count, as count-up does. Do NOT use the suffix-lands-after variant: 'K' changes the magnitude, so '$37K+' mid-count is honest while '$37' then 'K+' would misread.",
+      "affix_size": "0.55em, weight 700, keep count-up's affixLift optical trim",
+      "figure": "weight 800, letter-spacing -0.04em, line-height 1, tabular-nums, white",
+      "count_duration_s": 2.1,
+      "count_ease": "power3.out",
+      "scale_from": 0.62,
+      "format": "Math.round(v).toLocaleString('en-US') (fixed locale for determinism)",
+      "fit": "Font size comes from window.__hyperframes.fitTextFontSize(prefix + formatted(statValue) + suffix, { maxWidth: 700, fontFamily: <stack>, fontWeight: 800 }), clamped to the range 120 to 250 px. Compute it once at init from the FINAL string and use the same size for the cover copy and the counting copy."
+    },
+    "svg-stroke-trace": {
+      "paths": "the 9 stroke elements of the wordmark SVG (see content.signoff.letter_groups)",
+      "stroke": "#ffffff (svg color:#fff; stroke=currentColor), stroke-width 2.6 in viewBox units (about 16 px at 560 px wide)",
+      "draw_ease": "power2.out",
+      "draw_duration_s": 0.5,
+      "fill": "none (stroke-only)",
+      "hold_drift": "off",
+      "exit": "none"
+    },
+    "ring": {
+      "geometry": "SVG 840x840 box, circle cx=420 cy=420 r=413, stroke-width 14, fill none, stroke-linecap round",
+      "stroke": "url(#ringGrad): linearGradient x1=0 y1=0 x2=1 y2=1, #0e9f94 -> #0b5e7a",
+      "start": "rotate the circle -90deg (transform-origin centre) so the draw starts at 12 o'clock and runs clockwise",
+      "length": "measure with getTotalLength() at init; dasharray = LEN; never hard-code the circumference",
+      "track": "none. It is a brand ring, not a gauge, and it always closes to 100% in every reel so no reel implies a fraction of a maximum."
+    }
+  },
+  "variables": {
+    "declare_on": "<html data-composition-variables='[...]'> of the root composition (PROJECT_DIR/index.html)",
+    "binding": "Use data-var-text for every plain text slot (both the cover and the counting copies of the label bind to statLabel). Read prefix, value and suffix once at init via window.__hyperframes.getVariables() for the count-up and the cover number. Never read them per tick.",
+    "declarations": [
+      { "id": "contextLabel", "type": "string", "label": "Context label", "default": "F1Jobs.io · Sales & Operations", "maxLength": 40 },
+      { "id": "statPrefix", "type": "string", "label": "Stat prefix", "default": "$", "maxLength": 2 },
+      { "id": "statValue", "type": "number", "label": "Stat value (counts up from 0)", "default": 100, "min": 0, "max": 9999, "step": 1 },
+      { "id": "statSuffix", "type": "string", "label": "Stat suffix", "default": "K+", "maxLength": 3 },
+      { "id": "statLabel", "type": "string", "label": "Stat label", "default": "in revenue", "maxLength": 32 },
+      { "id": "detailLine", "type": "string", "label": "Detail line", "default": "from 7+ sales", "maxLength": 44 },
+      { "id": "timeLine", "type": "string", "label": "Time line", "default": "since May 2026", "maxLength": 24 },
+      { "id": "signoffLine", "type": "string", "label": "Sign-off line", "default": "Bhavini Malhotra · Sales & Operations", "maxLength": 44 }
+    ],
+    "not_variables": "The wordmark SVG, palette, ring and timing are fixed design shared by all 3 reels. The root data-duration is fixed at 15, and variables cannot change render length."
+  },
+  "variable_sets": {
+    "reel-1": {
+      "contextLabel": "F1Jobs.io · Sales & Operations",
+      "statPrefix": "$",
+      "statValue": 100,
+      "statSuffix": "K+",
+      "statLabel": "in revenue",
+      "detailLine": "from 7+ sales",
+      "timeLine": "since May 2026",
+      "signoffLine": "Bhavini Malhotra · Sales & Operations"
+    },
+    "reel-2": {
+      "contextLabel": "F1Jobs.io · Customer operations",
+      "statPrefix": "",
+      "statValue": 65,
+      "statSuffix": "%",
+      "statLabel": "workflow efficiency gain",
+      "detailLine": "after resolving 20+ customer tickets",
+      "timeLine": "since May 2026"
+    },
+    "reel-3": {
+      "contextLabel": "F1Jobs.io · Sales",
+      "statPrefix": "",
+      "statValue": 7,
+      "statSuffix": "+",
+      "statLabel": "sales closed",
+      "detailLine": "$100K+ in revenue",
+      "timeLine": "since May 2026"
+    }
+  },
+  "variable_sets_usage": "Build and render reel-1 only now (the defaults). Later: npx hyperframes render . --strict-variables --variables-file variables/reel-2.json -o renders/reel-2.mp4. Before handoff, fit-check the reel-2 strings (the longest) at t=7.5 s, because the label wraps to 2 lines and the detail may wrap.",
+  "layout": {
+    "entry_file": "PROJECT_DIR/index.html, which is the init scaffold's root composition. Rewrite it from 1920x1080 to 1080x1920 (viewport meta, html/body size, root data-width/height). compositions/ only holds the added registry sources.",
+    "root": "#stage: data-composition-id='reel-stat', data-start=0, data-duration=15, data-fps=30, data-width=1080, data-height=1920, position:relative; 1080x1920; overflow hidden. Put the background fill on a full-bleed child (#bg), not on the root.",
+    "safe_zone_px": {
+      "key_content_y": [269, 1536],
+      "x": [96, 984],
+      "note": "Top 14% = 268.8 px and bottom 20% = 384 px are avoided for key content. The whole lockup also fits the centre 3:4 crop (y 240 to 1680), and the number plus label sit inside the centre 1:1 crop (y 420 to 1500), so the poster survives 9:16, 3:4 and 1:1 grid tiles."
+    },
+    "layers": [
+      "z0 #bg: full-bleed linear-gradient(to bottom right, #0b5e7a, #0c1014), static",
+      "z1 #glow: one static soft radial glow, #0b7a75 at about 22% opacity, about 1000 px wide, centred on the ring (540, 796). It never animates, which costs no bitrate.",
+      "z2 #ring-box: the pinned 840x840 ring plus the stacked contents inside it (cover lockup, count lockup, wordmark), all occupying one CSS-grid cell (grid-area 1/1, place-items centre)",
+      "z3 text stack: eyebrow above the ring; the detail line and time chip (or the sign-off line) below it"
+    ],
+    "content_column": "#content: display flex, flex-direction column, align-items centre, padding 296px 96px 0, box-sizing border-box, width 100%, height 100%. Order: #eyebrow, gap 36, #ring-box (840x840, flex none), gap 44, #below-slot (a grid that stacks [#detail + #time-chip column] and #signoff-line in one cell). No absolute offsets on content containers; absolute is only for #bg, #glow and the ring SVG inside #ring-box.",
+    "hero_frame_t": 7.5,
+    "elements": {
+      "eyebrow": "#eyebrow, contextLabel: 34 px, weight 600, letter-spacing 0.02em, opacity 0.78, single line nowrap. Fit to 888 px (min 26 px). Keep the casing as supplied: no text-transform, because 'F1Jobs.io' must not be altered. Box y about 296 to 340.",
+      "ring_box": "#ring-box, 840x840 at y 376 to 1216, x 120 to 960, centre (540, 796). Inner usable chord is about 700 px at +/-160 px from centre and about 706 px at +/-200 px.",
+      "cover_lockup": "#cover-lockup (column, gap 18, centred in the ring): #cover-figure (static final string with the same affix styling and fitted size as the counter) + #cover-label (statLabel)",
+      "count_lockup": "#count-lockup (same geometry as the cover): #count-figure (prefix span + value span + suffix span, fixed-width container sized from the final string) + #count-label",
+      "label": "statLabel: 58 px, weight 600, opacity 1, max-width 660 px, at most 2 lines, text-wrap balance; shrink to 44 px minimum if it would need 3 lines",
+      "detail": "#detail, detailLine: 46 px, weight 500, opacity 0.88, max-width 860 px, at most 2 lines, text-wrap balance (min 38 px). Top at about y 1260.",
+      "time_chip": "#time-chip: inline-flex sized box, background #0b7a75, border-radius 999px, padding 16px 34px; #time-text timeLine at 32 px, weight 600, letter-spacing 0.02em, white, nowrap. Sits 28 px below the detail; bottom must stay at or above y 1500.",
+      "wordmark": "#wordmark: inline SVG viewBox 0 0 90 28, width 560 px (height about 174 px), color #ffffff, centred in #ring-box",
+      "signoff_line": "#signoff-line, signoffLine: 38 px, weight 500, opacity 0.88, single line if it fits 888 px (else 2 lines balanced). Occupies the detail slot below the ring, top at about y 1260."
+    }
+  },
+  "content": {
+    "value": 100,
+    "prefix": "$",
+    "suffix": "K+",
+    "label": "in revenue",
+    "ring": true,
+    "context": "F1Jobs.io · Sales & Operations",
+    "detail": "from 7+ sales",
+    "time": "since May 2026",
+    "facts_rule": "Every on-screen string comes from the variables. Add no claims, adjectives, numbers, CTAs, URLs or handles.",
+    "signoff": {
+      "wordmark_svg": "<svg viewBox=\"0 0 90 28\"><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 3v21\"/><circle cx=\"8\" cy=\"18\" r=\"6\"/><path d=\"M18 3v21M18 18a6 6 0 0 1 12 0v6\"/><circle cx=\"40\" cy=\"18\" r=\"6\"/><path d=\"M46 12v12\"/><path d=\"M50 12l5.5 12L61 12\"/><path d=\"M65 12v12\"/><path d=\"M70 12v12M70 18a6 6 0 0 1 12 0v6\"/><path d=\"M86 12v12\"/></g><g fill=\"currentColor\"><circle cx=\"65\" cy=\"6.5\" r=\"1.7\"/><circle cx=\"86\" cy=\"6.5\" r=\"1.7\"/></g></svg>",
+      "letter_groups": [
+        { "id": "wm-b", "elements": ["path M2 3v21", "circle 8,18 r6 (optional polish: rotate 180deg about its centre so the stroke starts at 9 o'clock where it meets the stem)"] },
+        { "id": "wm-h", "elements": ["path M18 3v21M18 18a6 6 0 0 1 12 0v6"] },
+        { "id": "wm-a", "elements": ["circle 40,18 r6 (default 3 o'clock start already meets the stem)", "path M46 12v12"] },
+        { "id": "wm-v", "elements": ["path M50 12l5.5 12L61 12"] },
+        { "id": "wm-i1", "elements": ["path M65 12v12"] },
+        { "id": "wm-n", "elements": ["path M70 12v12M70 18a6 6 0 0 1 12 0v6"] },
+        { "id": "wm-i2", "elements": ["path M86 12v12"] }
+      ],
+      "dots": ["#wm-dot-1 circle 65,6.5 r1.7 (filled)", "#wm-dot-2 circle 86,6.5 r1.7 (filled)"],
+      "line": "Bhavini Malhotra · Sales & Operations"
+    },
+    "scenes": [
+      { "id": "cover", "start": 0.0, "end": 1.0, "role": "Hook / poster", "motion": "Fully static, already composed: ring closed (dashoffset 0), #eyebrow, #cover-figure '$100K+', #cover-label. Nothing moves before 1.0 s, which overrides 'don't start at t=0' because frame 0 must be the poster." },
+      { "id": "reset", "start": 1.0, "end": 1.35, "role": "Pattern interrupt", "motion": "The cover lockup sinks out while the ring unwinds back to 12 o'clock. The eyebrow stays pinned." },
+      { "id": "count", "start": 1.35, "end": 4.15, "role": "Build (signature)", "motion": "Count-up 0 -> statValue with the scale grow; the ring redraws clockwise in the same ease and closes on the landing frame (3.45). One restrained landing pulse, then the label rises (value -> meaning)." },
+      { "id": "build", "start": 4.15, "end": 6.9, "role": "Build", "motion": "The detail line slides in from the left; the time chip pops open from its centre and its text fades in." },
+      { "id": "hold", "start": 6.9, "end": 10.3, "role": "Breathe", "motion": "The full stat lockup reads. The only ambient motion is hold_breath on #count-lockup (number + label); the ring stays untouched." },
+      { "id": "handoff", "start": 10.3, "end": 10.75, "role": "Resolve (exit)", "motion": "Time chip, detail, count lockup and eyebrow exit fast with .in eases. The ring stays pinned and closed." },
+      { "id": "signoff", "start": 10.75, "end": 15.0, "role": "Brand outro", "motion": "The wordmark draws letter by letter inside the ring, the i-dots pop, and the sign-off line fades up. Everything is static from 12.2 to 15.0 (2.8 s hold)." }
+    ],
+    "timeline": [
+      { "t": 1.0, "target": "#cover-lockup", "tween": "fromTo {autoAlpha:1, scale:1, y:0} -> {autoAlpha:0, scale:0.92, y:12}", "dur": 0.3, "ease": "power2.in", "then": "tl.set(#cover-lockup, {autoAlpha:0, visibility:'hidden'}) at 1.30" },
+      { "t": 1.0, "target": "#ring-arc", "tween": "fromTo strokeDashoffset 0 -> LEN (unwinds back to 12 o'clock)", "dur": 0.35, "ease": "power3.in" },
+      { "t": 1.35, "target": "#count-lockup", "tween": "fromTo autoAlpha 0 -> 1 (its label child stays hidden until 3.55)", "dur": 0.25, "ease": "power1.out" },
+      { "t": 1.35, "target": "count value (count-up frame rows / proxy)", "tween": "0 -> statValue, Math.round, en-US grouping, written with events enabled", "dur": 2.1, "ease": "power3.out" },
+      { "t": 1.35, "target": "#count-figure", "tween": "fromTo scale 0.62 -> 1 (transform-origin 50% 58%)", "dur": 2.1, "ease": "power3.out" },
+      { "t": 1.35, "target": "#ring-arc", "tween": "fromTo strokeDashoffset LEN -> 0 (immediateRender:false; same ease and duration as the count, so the ring closes on the landing frame)", "dur": 2.1, "ease": "power3.out" },
+      { "t": 3.45, "target": "#ring-box", "tween": "to scale 1.03, yoyo, repeat 1 (landing pulse; peak 865 px fits inside 1080)", "dur": 0.16, "ease": "sine.inOut" },
+      { "t": 3.55, "target": "#count-label", "tween": "fromTo {autoAlpha:0, y:24} -> {autoAlpha:1, y:0}", "dur": 0.6, "ease": "power2.out" },
+      { "t": 4.9, "target": "#detail", "tween": "fromTo {autoAlpha:0, x:-56} -> {autoAlpha:1, x:0}", "dur": 0.7, "ease": "expo.out" },
+      { "t": 6.4, "target": "#time-chip", "tween": "fromTo {autoAlpha:0, scaleX:0.3} -> {autoAlpha:1, scaleX:1} (transform-origin centre; the chip is a sized inline-flex box)", "dur": 0.5, "ease": "back.out(1.6)" },
+      { "t": 6.6, "target": "#time-text", "tween": "fromTo autoAlpha 0 -> 1", "dur": 0.3, "ease": "power1.out" },
+      { "t": 6.9, "target": "#count-lockup", "tween": "fromTo scale 1 -> 1.025 (hold_breath)", "dur": 3.4, "ease": "sine.inOut" },
+      { "t": 10.3, "target": "#time-chip", "tween": "to {autoAlpha:0, y:20}", "dur": 0.28, "ease": "power2.in" },
+      { "t": 10.35, "target": "#detail", "tween": "to {autoAlpha:0, y:20}", "dur": 0.28, "ease": "power2.in" },
+      { "t": 10.35, "target": "#count-lockup", "tween": "to {autoAlpha:0, scale:1.07}", "dur": 0.35, "ease": "power3.in" },
+      { "t": 10.4, "target": "#eyebrow", "tween": "to autoAlpha 0", "dur": 0.3, "ease": "power1.in", "then": "hard-kill with tl.set visibility hidden at 10.75 for #time-chip, #detail, #count-lockup, #eyebrow" },
+      { "t": 10.75, "target": "#wm-b .. #wm-i2 (7 letter groups)", "tween": "for each group i: tl.set(group, {autoAlpha:1}) at its start (avoids round-cap dots before the draw), then strokeDashoffset LEN -> 0 on each element in the group; starts at 10.75 + i*0.10 (10.75, 10.85, 10.95, 11.05, 11.15, 11.25, 11.35)", "dur": 0.5, "ease": "power2.out" },
+      { "t": 11.7, "target": "#wm-dot-1", "tween": "fromTo {autoAlpha:0, scale:0} -> {autoAlpha:1, scale:1} (transform-box fill-box, origin centre)", "dur": 0.3, "ease": "back.out(2.2)" },
+      { "t": 11.8, "target": "#wm-dot-2", "tween": "same as #wm-dot-1", "dur": 0.3, "ease": "back.out(2.2)" },
+      { "t": 11.7, "target": "#signoff-line", "tween": "fromTo {autoAlpha:0, y:16} -> {autoAlpha:1, y:0}", "dur": 0.5, "ease": "power1.out" },
+      { "t": 12.2, "target": "(all)", "tween": "No tweens from 12.2 to 15.0. This is the static sign-off hold, which is also the cheapest stretch to encode.", "dur": 2.8, "ease": "none" }
+    ],
+    "reading_pace_check_s": {
+      "contextLabel": "0.0 to 10.7 (10.7 s)",
+      "hero stat (final value)": "0.0 to 1.0 and 3.45 to 10.7 (8.2 s)",
+      "statLabel": "0.0 to 1.0 and 4.15 to 10.7 (7.5 s)",
+      "detailLine": "5.6 to 10.35 (4.75 s; reel-2's 5-word line needs about 3 s to read twice)",
+      "timeLine": "6.9 to 10.3 (3.4 s; 3 words need about 2 s)",
+      "wordmark": "11.85 to 15.0 (3.15 s)",
+      "signoffLine": "12.2 to 15.0 fully opaque (2.8 s; 5 words need about 2.5 s)",
+      "signoff_hold": "fully composed 12.2 to 15.0 = 2.8 s (requirement is at least 2 s)"
+    },
+    "ease_and_speed_variety": "Eases used: power1, power2, power3 (.in/.out), expo.out, back.out, sine.inOut. Durations range from 0.16 s to 3.4 s. Entrance directions: scale-grow (number), rise (label), from-left (detail), scaleX pop (chip), pen draw (wordmark), small rise (sign-off line)."
+  },
+  "constraints": {
+    "seek_safety": "One gsap.timeline({paused:true}) registered as window.__timelines['reel-stat'], ending with tl.seek(0). Use fromTo for every delayed element; use autoAlpha only on non-clip inner elements. The count value is computed per frame (count-up frame rows) or by a proxy written with events enabled. No Math.random, no Date.now, no CSS transitions.",
+    "clips": "A single full-duration clip carries the whole stage; the inner groups are timeline-driven. Never tween a .clip's visibility.",
+    "compression": "Under 2 MB total. Flat gradient background plus one static glow; solid shapes; no grain, noise, particles, blur filters, textures or animated full-frame gradients. Animate only transforms, opacity and stroke-dashoffset on small areas. 0 to 1.0 s and 12.2 to 15.0 s are fully static.",
+    "brand": "Use exactly the brand hexes. None of the Instagram hexes in palette_roles.banned, and no rounded-square camera-glyph shapes. The ring is a plain circle.",
+    "text": "Keep the supplied strings verbatim; no text-transform; no <br>. Text fits via max-width, wrapping and fitTextFontSize."
+  },
+  "proof_times_s": [0.0, 1.2, 2.2, 3.45, 7.5, 10.55, 11.4, 14.9],
+  "proof_notes": "0.0 = the poster; 3.45 = the ring closes exactly as the count lands; 7.5 = the hero frame (check safe zone and fit, also with reel-2 strings); 14.9 = the final hold (ring + full wordmark + sign-off line).",
+  "decisions": [
+    "Category 'stat' rather than 'kinetic-type': the piece is built around one hero number counting up, and the other lines are its label and context.",
+    "Poster vs count-up conflict: frames 0 to 1.0 s show the finished lockup as the poster, then a 0.35 s reset and a count-up from 0. This satisfies both 'first frame reads as poster' and 'count up to it'.",
+    "The ring always closes to 100% (brand ring, not a gauge), so no reel implies a fraction of a maximum the facts don't contain (65% is a gain, not a share of a whole).",
+    "Affixes stay fixed during the count (count-up block behaviour) instead of the suffix-lands-after rule variant, because 'K' changes magnitude.",
+    "The stat is split into statPrefix / statValue (typed number) / statSuffix so all three reels count up correctly ($100K+, 65%, 7+).",
+    "The ring is pinned for the full 15 s with no ambient rotation, so the loop seam (sign-off back to poster) is a clean content swap inside an identical ring.",
+    "The sign-off line goes below the ring in the detail slot; the ring holds only the wordmark, like a profile ring.",
+    "The context label keeps its supplied casing (no uppercase), so the 'F1Jobs.io' brand spelling is preserved.",
+    "The detail and time lines are not on the poster, which keeps it to three reads (context, number, label).",
+    "The brand's system font stack overrides the schema's embed-list font; render on macOS.",
+    "Entry file is the scaffold's root index.html. Registry components are ported inline to keep exactly one paused timeline.",
+    "Encoding is CRF first with a bitrate-cap fallback to stay at or under 2,000,000 bytes; no audio track; faststart."
+  ]
+}

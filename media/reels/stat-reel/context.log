@@ -1,0 +1,70 @@
+[2026-10-20] motion-graphics / Director (Part 1 + Part 2 in one pass)
+PROJECT_DIR = media/reels/stat-reel (created as media/reels/revenue) (already initialised with --example=blank; init was not re-run)
+SKILL_DIR   = ~/.claude/skills/motion-graphics
+
+## Inputs read
+- agents/director.md, references/shot-plan-ir.md, catalog-map.md, categories/stat/module.md, categories/kinetic-type/module.md (for comparison)
+- references/motion-vocabulary.md, references/builder-contract.md, agents/builder.md
+- hyperframes-core: references/variables-and-media.md, data-attributes.md, determinism-rules.md (layout / text fit)
+- hyperframes-creative: references/data-in-motion.md, references/motion-principles.md
+- hyperframes-animation: rules/counting-dynamic-scale.md, rules/stat-bars-and-fills.md, rules/svg-path-draw.md, blueprints/dataviz-countup.md, blueprints-index (fixed-anchor-cycle, titlecard-reveal)
+- registry sources (read-only via raw GitHub, nothing installed): components/count-up/count-up.html, components/svg-stroke-trace/svg-stroke-trace.html
+
+## Part 1: plan
+- Search needed? NO. The user supplied every string, so this is a form category and asset_needs = [] (source phase skipped).
+- Category: stat (one hero number counting up, plus label/context lines). kinetic-type was considered and rejected because the number is the hero, not a line of copy.
+- Envelope: 15 s, 30 fps, 1080x1920 (9:16), mp4, no audio, brand palette and system font stack (both fixed by the brief).
+
+## Part 2: catalog searches (npx hyperframes@0.8.180 catalog --query ... --json), top hits
+- "stat number count-up with progress ring" -> mk-progress-stat (block, 1920x1080, progress track to value/max), conic-progress-ring, number-wheel, count-up, apple-money-count (1920x1080, green flash + money burst + SFX)
+- "count-up number" -> number-wheel, number-pop-in, count-up, apple-money-count, mk-progress-stat, mk-usage-arc
+- "progress ring arc draw" -> conic-progress-ring, mk-usage-arc, arc-motion-path, mk-progress-stat, outline-draw
+- "monoline logo SVG path draw sign-off outro" -> logo-outro (1920x1080 piece assembly + glow), svg-line-draw-loader, svg-stroke-trace, hw-path-text
+- "brand lockup end card with name and title" -> logo-brand-close, cta-lockup, titlecard-lockup, logo-sting
+- "kinetic text lines stagger reveal headline" -> text-stagger, carousel-text-circle-*, kinetic-center-build
+- "vertical 9:16 stat reel social" -> mk-progress-stat, slot-machine-roll, tiktok-follow (no 9:16 stat block exists)
+- "pill chip label pop in" -> caption-pill-karaoke, lt-soft-pill, badge-pop
+- "supporting text line slide in" -> line-by-line-slide, line-swap, text-state-swap
+- "story ring avatar ring draw" / "fixed anchor content swap" -> nothing that fits (avatar-cloud, kinetic-type-swap, locked-nucleus-orbit)
+
+## Picks
+- block: count-up (component). It gives prefix/value/suffix, tabular numerals, affix optical lift, deterministic per-frame integers and en-US grouping. Port it inline into the single root timeline.
+- block: svg-stroke-trace (component). Use its measured-length draw for the wordmark, extended to 9 stroke elements plus 2 dot pops, with drift and fill turned off.
+- rules: counting-dynamic-scale, stat-bars-and-fills (ring form), svg-path-draw. Blueprint: dataviz-countup (single instrument, static camera) with the fixed-anchor idea (the ring is pinned).
+- rejected: apple-money-count (16:9, green flash, money burst and SFX are off-brand and the reel is muted); mk-progress-stat (16:9, and its value/max track implies a maximum the facts lack); conic-progress-ring and mk-usage-arc (fill bound to a percentage); logo-outro (16:9 piece assembly plus glow; the brief asks for a path draw).
+- hand-authored gap: a full brand-ring draw/retract that is not bound to a percentage. It is covered by the stat-bars-and-fills ring form plus svg-path-draw, so it is not a registry miss. No `feedback --search-miss` was filed: the rules cover the move, and that command sends data to a third-party service, which is left to the user.
+
+## Decisions made in place of asking (the user asked for the recommended option everywhere)
+1. Poster vs count-up conflict: frames 0 to 1.0 s show the finished lockup (ring closed, context, $100K+, label) as the poster. A 0.35 s reset (lockup sinks, ring unwinds) follows, then the count-up from 0 runs at 1.35 to 3.45 s. Reason: the first frame must read as a poster, and the brief also requires a count-up to the value.
+2. The ring always closes to 100% in every reel; it is the brand ring, not a gauge. Reason: filling to 65% would imply 65% of a maximum, but '65% workflow efficiency gain' is a gain, and '$100K+' and '7+' have no maximum. That would add a claim the resume does not make.
+3. Prefix and suffix stay fixed during the count (count-up behaviour), not the suffix-lands-after variant. Reason: 'K' changes the magnitude, so '$37K+' mid-count is honest while '$37' then 'K+' misreads.
+4. The stat is split into statPrefix / statValue (typed number) / statSuffix rather than one string. Reason: it lets reels 2 and 3 ('65%', '7+') count up correctly with no string parsing.
+5. Variables (root <html data-composition-variables>): contextLabel, statPrefix, statValue, statSuffix, statLabel, detailLine, timeLine, signoffLine. Value sets for reel-1/2/3 are in shot-plan.json. The wordmark, palette and timing are fixed shared design, and root data-duration stays 15 because variables cannot change render length.
+6. No ambient motion on the ring. Reason: the inline reel loops, and keeping the ring identical at t=15 and t=0 makes the loop seam a clean content swap inside a pinned ring. It also saves bitrate. The only ambient motion is hold_breath on the stat lockup (6.9 to 10.3 s).
+7. The sign-off line sits below the ring in the detail slot, and the ring frames only the wordmark, like a profile ring.
+8. The context label keeps its supplied casing (no text-transform), so the 'F1Jobs.io' spelling is preserved.
+9. The poster carries only context, number and label (three reads); the detail and time lines arrive later.
+10. Font: the brand's system stack overrides the schema's 'HF embed-list font' field. Render on macOS so -apple-system resolves to SF Pro, and load no webfont.
+11. Entry file is PROJECT_DIR/index.html, the scaffold's root composition, rewritten from 1920x1080 to 1080x1920. Registry components are ported inline, because the motion-graphics contract requires exactly one paused timeline.
+12. Encoding to meet the 2 MB budget: render with --crf 23 first, step to 26 and then 28 if over 2,000,000 bytes, and fall back to --video-bitrate 900k. No audio track, and +faststart for inline web playback.
+13. The 'don't start at t=0' motion guideline is deliberately overridden for 0 to 1.0 s, because the poster frame must be static and fully composed.
+
+## Beat timeline (s)
+0.00-1.00 cover/poster (static) | 1.00-1.35 reset | 1.35-3.45 count-up + ring redraw (closes at 3.45) | 3.45 landing pulse | 3.55-4.15 label rises
+4.90-5.60 detail from left | 6.40-6.90 time chip pops | 6.90-10.30 hold (hold_breath) | 10.30-10.75 stat lockup exits, ring stays
+10.75-11.85 wordmark draws letter by letter | 11.70-12.20 i-dots pop + sign-off line fades up | 12.20-15.00 static sign-off hold (2.8 s)
+
+## Constraint mapping
+- Safe zone: key content at y 269 to 1536, x 96 to 984. The lockup spans y 296 to about 1474, and the number plus label sit inside the centre 1:1 crop.
+- Under 2 MB: flat gradient, one static glow, solid shapes; no grain, noise, particles or blur; long static stretches (0 to 1.0 s and 12.2 to 15 s).
+- Reading pace: every line is on screen at least twice its read time (table in shot-plan.json content.reading_pace_check_s).
+- Sign-off hold: 2.8 s (at least 2 s required).
+- Facts: strings come verbatim from the variables, with no added claims, adjectives or numbers.
+
+## Open risks for the Builder
+- Fit-check the reel-2 strings at 7.5 s: the label wraps to 2 lines inside the ring, and the 36-character detail line may wrap.
+- With round linecaps, a zero-length dash can show a dot before the draw. Gate each wordmark letter group with autoAlpha at its own start.
+- The count value must be written with events enabled (or with count-up's frame-row mechanism), or snapshots freeze at 0.
+- The project's AGENTS.md / CLAUDE.md research protocol was not run here; this run follows the motion-graphics pipeline the dispatcher defined.
+
+Status: shot-plan.json FINAL (Part 1 + Part 2). Next: Builder (agents/builder.md).

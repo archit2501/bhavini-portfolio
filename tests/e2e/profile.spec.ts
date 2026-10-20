@@ -20,6 +20,7 @@ test.describe('desktop header (1280px)', () => {
     // The photo's own width; its bounding box also includes the gap between photo and ring.
     await expect(avatar.locator('.initials, img')).toHaveCSS('width', '150px');
     await expect(header.locator('.username')).toHaveCSS('font-size', '20px');
+    await expect(header.locator('.avatar-link')).toHaveCSS('text-decoration-line', 'none');
     for (const button of await header.locator('.btn').all()) {
       near((await box(button)).height, 32);
       await expect(button).toHaveCSS('border-radius', '8px');
