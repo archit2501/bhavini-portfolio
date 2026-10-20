@@ -74,13 +74,15 @@ test('/reels/ opens with the Reels tab selected', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bhavini Malhotra');
 });
 
-test('a tile opens its post page with the caption', async ({ page }) => {
+test('on a phone, a tile opens its post page with the caption', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await page.locator('#panel-posts .tile a').nth(4).click();
   await expect(page).toHaveURL(/\/p\/vastra-kala-export\/$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
     'Content to dispatch, 5+ regions',
   );
-  await expect(page.locator('.caption')).toContainText('across 5+ global regions');
-  await expect(page.locator('.meta')).toHaveText('Vastra Kala · August 2025');
+  await expect(page.locator('.post-view .caption')).toContainText('across 5+ global regions');
+  await expect(page.locator('.comment .meta').first()).toHaveText('Vastra Kala');
+  await expect(page.locator('.post-view .date')).toHaveText('August 2025');
 });
