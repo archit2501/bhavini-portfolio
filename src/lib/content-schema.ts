@@ -30,6 +30,10 @@ export const profileSchema = z.object({
     resume: text.optional(),
     email: z.email().optional(),
   }),
+  /** For search engines (schema.org Person); every value must be on her resume. */
+  jobTitle: text.optional(),
+  organization: z.object({ name: text, url: z.url() }).optional(),
+  education: text.optional(),
 });
 
 const imageMedia = z.object({ type: z.literal('image'), src: text, alt: altText });

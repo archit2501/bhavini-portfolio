@@ -1,18 +1,20 @@
 ---
 import '../styles/global.css';
 import ContactSheet from '../components/ContactSheet.astro';
+import Footer from '../components/Footer.astro';
 import AppBar from '../components/nav/AppBar.astro';
 import BottomTabs from '../components/nav/BottomTabs.astro';
 import SideNav from '../components/nav/SideNav.astro';
 import type { NavId } from '../components/nav/nav-items';
 import { loadSiteContent } from '../lib/content';
+import { jsonLdScript, personJsonLd } from '../lib/seo';
 import { pageTitle } from '../lib/site';
 
 interface Props {
   /** Inner pages put their name first; the home page leaves this out. */
   title?: string;
   description?: string;
-  /** Share-card image path, e.g. /og/p/revenue-100k.png. */
+  /** Share-card image path, e.g. /og/p/revenue-100k.png; defaults to the profile card. */
   image?: string;
   type?: 'website' | 'article';
   current?: NavId;
@@ -22,14 +24,14 @@ const { profile } = await loadSiteContent();
 const {
   title,
   description = `${profile.displayName}, ${profile.category} at F1Jobs.io, ${profile.location}.`,
-  image,
+  image = '/og/default.png',
   type = 'website',
   current,
 } = Astro.props;
 const fullTitle = pageTitle(title);
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
-const imageUrl = image && new URL(image, Astro.site).href;
-const linkedinLabel = profile.links.linkedin.replace(/^https?:\/\/(www\.)?/, '');
+const imageUrl = new URL(image, Astro.site).href;
+const person = jsonLdScript(personJsonLd(profile, new URL('/', Astro.site).href));
 ---
 
 <html lang="en">
@@ -45,10 +47,13 @@ const linkedinLabel = profile.links.linkedin.replace(/^https?:\/\/(www\.)?/, '')
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
     <meta property="og:url" content={pageUrl} />
-    {imageUrl && <meta property="og:image" content={imageUrl} />}
-    {imageUrl && <meta property="og:image:width" content="1200" />}
-    {imageUrl && <meta property="og:image:height" content="630" />}
-    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={pageUrl} />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <script type="application/ld+json" set:html={person} />
   </head>
   <body>
     <a class="skip-link" href="#main">
@@ -60,12 +65,7 @@ const linkedinLabel = profile.links.linkedin.replace(/^https?:\/\/(www\.)?/, '')
       <main id="main" tabindex="-1">
         <slot />
       </main>
-      <footer id="contact" class="site-footer">
-        <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
-          {linkedinLabel}
-        </a>
-        {profile.links.email && <a href={`mailto:${profile.links.email}`}>{profile.links.email}</a>}
-      </footer>
+      <Footer profile={profile} />
     </div>
     <BottomTabs current={current} />
     <ContactSheet profile={profile} />
@@ -110,20 +110,5 @@ const linkedinLabel = profile.links.linkedin.replace(/^https?:\/\/(www\.)?/, '')
 
   main:focus {
     outline: none;
-  }
-
-  .site-footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-2) var(--space-4);
-    padding: var(--space-8) var(--space-4);
-    color: var(--text-secondary);
-    font-size: var(--fs-12);
-    line-height: var(--lh-12);
-  }
-
-  .site-footer a {
-    color: inherit;
   }
 </style>

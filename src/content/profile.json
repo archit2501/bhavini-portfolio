@@ -11,6 +11,12 @@
     "stats": ["revenue", "deals", "workflow"],
     "links": {
       "linkedin": "https://www.linkedin.com/in/bhavini-malhotra-26b0a224"
-    }
+    },
+    "jobTitle": "Sales & Operations Executive",
+    "organization": {
+      "name": "F1Jobs.io",
+      "url": "https://f1jobs.io"
+    },
+    "education": "Christ University"
   }
 }
