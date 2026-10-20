@@ -15,10 +15,12 @@
     "lighthouse": "lhci autorun"
   },
   "dependencies": {
+    "@lucide/astro": "1.50.0",
     "astro": "^7.4.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.11",
+    "@axe-core/playwright": "4.13.0",
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.64.1",

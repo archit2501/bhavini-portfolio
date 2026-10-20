@@ -1,31 +1,38 @@
 ---
-import Wordmark from '../assets/wordmark.svg';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadSiteContent } from '../lib/content';
-import { pageTitle } from '../lib/site';
-import '../styles/global.css';
 
 const { profile } = await loadSiteContent();
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Bhavini Malhotra, Sales & Operations at F1Jobs.io, Bangalore."
-    />
-    <title>{pageTitle()}</title>
-  </head>
-  <body>
-    <a href="#main">Skip to content</a>
-    <header style="padding: 16px">
-      <Wordmark height={28} />
-    </header>
-    <main id="main">
-      <h1>{profile.displayName}</h1>
-      <p>{profile.category}</p>
-      <p style="white-space: pre-line">{profile.bio}</p>
-    </main>
-  </body>
-</html>
+<BaseLayout current="home">
+  <section class="intro">
+    <h1>{profile.displayName}</h1>
+    <p class="category">{profile.category}</p>
+    <p class="bio">{profile.bio}</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    max-width: 935px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-4);
+  }
+
+  h1 {
+    margin: 0 0 var(--space-1);
+    font-size: var(--fs-20);
+    line-height: var(--lh-20);
+  }
+
+  .category {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  .bio {
+    margin: var(--space-2) 0 0;
+    white-space: pre-line;
+  }
+</style>
