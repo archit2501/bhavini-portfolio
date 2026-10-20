@@ -1,38 +1,11 @@
 ---
+import ProfileHeader from '../components/profile/ProfileHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadSiteContent } from '../lib/content';
 
-const { profile } = await loadSiteContent();
+const { profile, figures } = await loadSiteContent();
 ---
 
 <BaseLayout current="home">
-  <section class="intro">
-    <h1>{profile.displayName}</h1>
-    <p class="category">{profile.category}</p>
-    <p class="bio">{profile.bio}</p>
-  </section>
+  <ProfileHeader profile={profile} figures={figures} />
 </BaseLayout>
-
-<style>
-  .intro {
-    max-width: 935px;
-    margin: 0 auto;
-    padding: var(--space-6) var(--space-4);
-  }
-
-  h1 {
-    margin: 0 0 var(--space-1);
-    font-size: var(--fs-20);
-    line-height: var(--lh-20);
-  }
-
-  .category {
-    margin: 0;
-    color: var(--text-secondary);
-  }
-
-  .bio {
-    margin: var(--space-2) 0 0;
-    white-space: pre-line;
-  }
-</style>
