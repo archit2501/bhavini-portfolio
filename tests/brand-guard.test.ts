@@ -61,6 +61,16 @@ describe('brand guard', () => {
     expect(brandViolations(SCANNED.flatMap((d) => files(join(ROOT, d))))).toEqual([]);
   });
 
+  // CI runs this file again after `npm run build`, so the built pages are scanned too.
+  it.skipIf(!existsSync(join(ROOT, 'dist')))(
+    'finds no Instagram brand assets in the built site',
+    () => {
+      const built = files(join(ROOT, 'dist')).filter((f) => /\.(html|css|js|xml|txt)$/.test(f));
+      expect(built.length).toBeGreaterThan(0);
+      expect(brandViolations(built)).toEqual([]);
+    },
+  );
+
   it('keeps "insta" and "gram" out of the domain', () => {
     const cname = join(ROOT, 'public', 'CNAME');
     if (!existsSync(cname)) return;
